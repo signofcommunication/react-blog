@@ -16,30 +16,30 @@ interface Project {
 const Projects: React.FC = () => {
   const projects: Project[] = [
     {
-      id: "1",
-      title: "React Blog with MDX",
-      description:
-        "A modern blog built with React, TypeScript, and MDX. Features include markdown rendering, category filtering, and search functionality.",
-      technologies: ["React", "TypeScript", "MDX", "Tailwind CSS", "Vite"],
-      github: "#",
-      status: "in-progress",
-    },
-    {
-      id: "2",
-      title: "Portfolio Website",
-      description:
-        "Personal portfolio website showcasing my projects, skills, and blog posts with a modern and responsive design.",
-      technologies: ["React", "TypeScript", "Tailwind CSS"],
-      link: "#",
+      id: "canva-1",
+      title: "Canva Design Presentation",
+      description: "Presentation created in Canva. Click to open the design.",
+      technologies: ["Canva", "Design", "Presentation"],
+      link: "https://www.canva.com/design/DAG4c1dXZTo/39WwTMPHtf_08ReFNIidTw/edit?utm_content=DAG4c1dXZTo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
       status: "completed",
     },
     {
-      id: "3",
-      title: "Task Management App",
+      id: "yt-6Xs0vo_IE-w",
+      title: "YouTube Video Project",
+      description: "A published video on YouTube. Click to watch the video.",
+      technologies: ["YouTube", "Video", "Content"],
+      link: "https://youtu.be/6Xs0vo_IE-w?si=ywGsLXToVfPWTwts",
+      image: "https://img.youtube.com/vi/6Xs0vo_IE-w/hqdefault.jpg",
+      status: "completed",
+    },
+    {
+      id: "pdf-1",
+      title: "Kepentingan Elit & Marginalisasi Masyarakat Lokal",
       description:
-        "A productivity app for managing tasks and projects with drag-and-drop functionality and local storage.",
-      technologies: ["React", "TypeScript", "React DnD", "LocalStorage"],
-      status: "planned",
+        "Dokumen PDF tentang pengelolaan kekayaan alam di Indonesia.",
+      technologies: ["PDF", "Essay", "PKn"],
+      link: "/Kepentingan Elit, Marginalisasi Masyarakat Lokal, dan Kerusakan Lingkungan dalam Pengelolaan Kekayaan Alam di Indonesia (6).pdf",
+      status: "completed",
     },
   ];
 
@@ -65,6 +65,27 @@ const Projects: React.FC = () => {
     );
   };
 
+  const getLinkLabel = (url: string) => {
+    const u = url.toLowerCase();
+    if (u.includes("youtube.com") || u.includes("youtu.be"))
+      return "Watch Video";
+    if (u.includes("canva.com")) return "View Design";
+    if (u.endsWith(".pdf")) return "View PDF";
+    return "View Project";
+  };
+
+  const getCardVisual = (url?: string) => {
+    if (!url) return { bg: "from-purple-100 to-blue-100", icon: "🚀" } as const;
+    const u = url.toLowerCase();
+    if (u.includes("youtu"))
+      return { bg: "from-red-100 to-rose-100", icon: "▶️" } as const;
+    if (u.includes("canva"))
+      return { bg: "from-purple-100 to-pink-100", icon: "🎨" } as const;
+    if (u.endsWith(".pdf"))
+      return { bg: "from-amber-100 to-orange-100", icon: "📄" } as const;
+    return { bg: "from-purple-100 to-blue-100", icon: "🚀" } as const;
+  };
+
   return (
     <AnimatedPage>
       <div className="min-h-screen bg-white">
@@ -85,8 +106,7 @@ const Projects: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-xl lg:text-2xl text-purple-100 max-w-3xl"
             >
-              A showcase of my web development projects, experiments, and
-              learning endeavors
+              Selected works I published and shared.
             </motion.p>
           </div>
         </header>
@@ -94,7 +114,6 @@ const Projects: React.FC = () => {
         {/* Projects Grid */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {" "}
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -103,10 +122,27 @@ const Projects: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.1 * index }}
                 className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group"
               >
-                {/* Project Image Placeholder */}
-                <div className="bg-gradient-to-br from-purple-100 to-blue-100 h-48 flex items-center justify-center">
-                  <div className="text-6xl">🚀</div>
-                </div>
+                {/* Project Image */}
+                {project.image ? (
+                  <div className="h-48 overflow-hidden bg-gray-100">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={`bg-gradient-to-br ${
+                      getCardVisual(project.link).bg
+                    } h-48 flex items-center justify-center`}
+                  >
+                    <div className="text-6xl">
+                      {getCardVisual(project.link).icon}
+                    </div>
+                  </div>
+                )}
 
                 {/* Project Content */}
                 <div className="p-6">
@@ -144,7 +180,7 @@ const Projects: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        View Project
+                        {getLinkLabel(project.link)}
                       </a>
                     )}
                     {project.github && (
@@ -210,7 +246,7 @@ const Projects: React.FC = () => {
                   Technologies Used
                 </div>
               </div>
-            </div>{" "}
+            </div>
           </div>
         </section>
       </div>
